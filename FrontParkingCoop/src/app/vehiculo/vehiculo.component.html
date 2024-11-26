@@ -1,0 +1,78 @@
+<div class="flex justify-content-center">
+    <div class="w-6 flex gap-5 flex-column">
+      <p-menubar [model]="items" />
+      <p-table [value]="vehiculos" styleClass="{{'p-datatable-sm'}}"
+               selectionMode="single" [(selection)]="selectedVehiculo" (onRowSelect)="seleccionarVehiculo()" >
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            Vehiculo registrados
+            <p-button icon="pi pi-plus" (click)="verFormVehiculo = true"/>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Propietario</th>
+            <th>Parqueadero</th>
+            <th>Placa</th>
+            <!-- <th>Direccion</th> -->
+            <!-- <th>Telefono</th> -->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-vehiculo>
+          <tr [pSelectableRow]="vehiculo">
+            <!-- <td>{{ propietario.parqueadero?.nombre }}</td> -->
+            <td>{{ vehiculo.propietario?.nombres }}</td>
+            <td>{{ vehiculo.parqueadero?.nombre }}</td>
+            <td>{{ vehiculo.placa }}</td>
+            <!-- <td>{{ propietario.telefono }}</td> -->
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  
+  <p-dialog header="Crear / Editar" [modal]="true" [(visible)]="verFormVehiculo" [style]="{ width: '31rem' }" (onHide)="cancel()">
+    <form [formGroup]="formVehiculo" class="flex flex-column gap-3">
+      <div class="flex flex-column gap-2">
+        <label for="propietario_id">Propietario</label>
+        <p-dropdown 
+          formControlName="propietario_id"
+          [options]="propietarios" 
+          optionLabel="nombres" 
+          optionValue="id"
+          placeholder="Seleccione un propietario" 
+          filter="true" 
+          [showClear]="true">
+        </p-dropdown>
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="parqueadero_id">Parqueadero</label>
+        <p-dropdown 
+          formControlName="parqueadero_id"
+          [options]="parqueaderos" 
+          optionLabel="nombre" 
+          optionValue="id"
+          placeholder="Seleccione un parqueadero" 
+          filter="true" 
+          [showClear]="true">
+        </p-dropdown>
+      </div>
+
+
+      <div class="flex flex-column gap-2">
+        <label for="placa">Placa</label>
+        <input
+          formControlName="placa"
+          pInputText
+          id="placa"
+          aria-describedby="placa-help"/>
+      </div>
+    </form>
+  
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancelar" severity="secondary" (onClick)="cancel()" />
+      <p-button label="Guardar" disabled="{{!formVehiculo.valid}}" (onClick)="accionFormularioVehiculo()" />
+    </div>
+  </p-dialog>
+  

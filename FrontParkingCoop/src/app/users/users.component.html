@@ -1,0 +1,119 @@
+<div class="flex justify-content-center">
+    <div class="w-6 flex gap-5 flex-column">
+      <p-menubar [model]="items" />
+      <p-table [value]="usuarios" styleClass="{{'p-datatable-sm'}}"
+               selectionMode="single" [(selection)]="selectedUsuario" (onRowSelect)="seleccionarParqueadero()" >
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            Usuarios registrados
+            <p-button icon="pi pi-plus" (click)="verFormUsuario = true"/>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Parqueadero</th>
+            <th>Nombre completo</th>
+            <th>Email</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+          <tr [pSelectableRow]="usuario">
+            <td>{{ usuario.parqueadero?.nombre }}</td>
+            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.direccion }}</td>
+            <td>{{ usuario.telefono }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  
+  <p-dialog header="Crear / Editar" [modal]="true" [(visible)]="verFormUsuario" [style]="{ width: '31rem' }" (onHide)="cancel()">
+    <form [formGroup]="formUsuario" class="flex flex-column gap-3">
+      <div class="flex flex-column gap-2">
+        <label for="parqueadero_id">Parqueadero</label>
+        <p-dropdown 
+          formControlName="parqueadero_id"
+          [options]="parqueaderos" 
+          optionLabel="nombre" 
+          optionValue="id"
+          placeholder="Seleccione un parqueadero" 
+          filter="true" 
+          [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="flex flex-column gap-2">
+        <label for="username">usuario</label>
+        <input
+          formControlName="username"
+          pInputText
+          id="username"
+          aria-describedby="username-help"/>
+      </div>
+
+      <div class="flex flex-row gap-2">
+        <div class="flex flex-column gap-2">
+          <label for="first_name">Nombre</label>
+          <input
+            formControlName="first_name"
+            pInputText
+            id="first_name"
+            aria-describedby="first_name-help"/>
+        </div>
+        <div class="flex flex-column gap-2">
+          <label for="last_name">Apellidos</label>
+          <input
+            formControlName="last_name"
+            pInputText
+            id="last_name"
+            aria-describedby="last_name-help"/>
+        </div>
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="email">Correo electronico</label>
+        <input
+          formControlName="email"
+          pInputText
+          id="email"
+          aria-describedby="email-help"/>
+      </div>
+  
+      <div class="flex flex-column gap-2">
+        <label for="password">Contraseña</label>
+        <input
+          formControlName="password"
+          pInputText
+          id="password"
+          type="password"
+          aria-describedby="password-help"/>
+      </div>
+  
+      <div class="flex flex-column gap-2">
+        <label for="direccion">Direccion</label>
+        <input
+          formControlName="direccion"
+          pInputText
+          id="direccion"
+          aria-describedby="username-help"/>
+      </div>
+  
+      <div class="flex flex-column gap-2">
+        <label for="telefono">Telefono</label>
+        <input
+          formControlName="telefono"
+          pInputText
+          id="telefono"
+          aria-describedby="username-help"/>
+      </div>
+    </form>
+  
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancelar" severity="secondary" (onClick)="cancel()" />
+      <p-button label="Guardar" disabled="{{!formUsuario.valid}}" (onClick)="accionFormularioParqueadero()" />
+    </div>
+  </p-dialog>
+  
